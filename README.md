@@ -1,5 +1,5 @@
 # mbed-os-emwin-ssd1306
-This repository contains the configuration files required to run emWin using the CY8CKIT-032 shield.  That shield has a Saloman SSD1306 Display driver that is attached using a I2C Bus
+This repository contains the configuration files required to run emWin using the CY8CKIT-032 shield.  That shield has a SOLOMON SYSTECH SSD1306 Display driver that is attached using a I2C Bus
 
 These files contain the GUI configuration files as well as the the SSD1306 interface files.  The interface is implemented using the mbedos HAL.
 
