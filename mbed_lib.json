@@ -4,6 +4,6 @@
         "SDA":"P6_1",
         "SCL":"P6_0",
         "I2CADDRESS":"0x78",
-        "I2CFREQ":"100000"
+        "I2CFREQ":"400000"
     }
 }
