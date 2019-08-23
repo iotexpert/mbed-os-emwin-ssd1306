@@ -1,5 +1,5 @@
 /******************************************************************************
-* File Name: i2c_portapi.cpp
+* File Name: ssd1306_portapi.cpp
 *
 * Version: 1.00
 *
@@ -42,7 +42,7 @@
 
 #include "GUI.h"
 
-#include "i2c_portapi.h"
+#include "ssd1306.h"
 #include "mbed.h"
 
 /*********************************************************************
@@ -53,11 +53,11 @@
   Needs to be adapted to custom hardware.
 */
 /* I2C port to communicate with the OLED display controller */
-I2C Display_I2C(MBED_CONF_APP_DISPLAY_SDA, MBED_CONF_APP_DISPLAY_SCL);
+I2C Display_I2C(MBED_CONF_SSD1306_OLED_SDA, MBED_CONF_SSD1306_OLED_SCL);
 //I2C Display_I2C(P6_1, P6_0);
 
 /* I2C slave address, Command and Data byte prefixes for the display controller */
-#define OLED_I2C_ADDRESS              (0x78)
+#define MBED_CONF_SSD1306_OLED__I2CADDRESS              (0x78)
 #define OLED_CONTROL_BYTE_CMD_BYTE    (0x80)
 #define OLED_CONTROL_BYTE_CMD_STREAM  (0x00)
 
@@ -65,7 +65,6 @@ I2C Display_I2C(MBED_CONF_APP_DISPLAY_SDA, MBED_CONF_APP_DISPLAY_SCL);
 #define OLED_CONTROL_BYTE_DATA_STREAM (0x40)
 
 /* I2C bus speed */
-#define I2C_SPEED                   (100000)
 
 /*********************************************************************
 *
@@ -87,15 +86,13 @@ I2C Display_I2C(MBED_CONF_APP_DISPLAY_SDA, MBED_CONF_APP_DISPLAY_SCL);
 *  None
 *
 *******************************************************************************/
-void I2C_Init(void) 
+void ssd1306_Init(void) 
 {
-//    printf("I2C_Init\n");
-    Display_I2C.frequency(I2C_SPEED);
-//    printf("I2C_INIT Done\n");
+    Display_I2C.frequency(MBED_CONF_SSD1306_OLED_I2CFREQ);
 }
 
 /*******************************************************************************
-* Function Name: void I2C_Write00(unsigned char c) 
+* Function Name: void ssd1306_Write00(unsigned char c) 
 ********************************************************************************
 *
 * Summary: This function writes a command byte to the display controller with A0 = 0
@@ -107,7 +104,7 @@ void I2C_Init(void)
 *  None
 *
 *******************************************************************************/
-void I2C_WriteCmd(unsigned char c) 
+void ssd1306_WriteCmd(unsigned char c) 
 {
   //  printf("Command = %x\n",c);
 
@@ -119,22 +116,22 @@ void I2C_WriteCmd(unsigned char c)
     buff[1] = (char)c;
     
     /* Write the buffer to display controller */
-    Display_I2C.write(OLED_I2C_ADDRESS, buff, sizeof(buff), false);
+    Display_I2C.write(MBED_CONF_SSD1306_OLED__I2CADDRESS, buff, sizeof(buff), false);
 }
 
-void I2C_WriteCmdStream(const char *data,int num)
+void ssd1306_WriteCmdStream(const char *data,int num)
 {
     char *buffer = (char *)malloc(num+1);
     memcpy(buffer+1,data,num);
     buffer[0] = 0x00; // Continous stream of commands
-    int rval = Display_I2C.write(OLED_I2C_ADDRESS, (const char *)buffer, num+1);
+    int rval = Display_I2C.write(MBED_CONF_SSD1306_OLED__I2CADDRESS, (const char *)buffer, num+1);
 
 }
 
 
 
 /*******************************************************************************
-* Function Name: void I2C_Write01(unsigned char c) 
+* Function Name: void ssd1306_Write01(unsigned char c) 
 ********************************************************************************
 *
 * Summary: This function writes a data byte to the display controller with A0 = 1
@@ -146,7 +143,7 @@ void I2C_WriteCmdStream(const char *data,int num)
 *  None
 *
 *******************************************************************************/
-void I2C_WriteData(unsigned char c) 
+void ssd1306_WriteData(unsigned char c) 
 {
 //    printf("Data = %x\n",c);
     char buff[2];
@@ -157,12 +154,12 @@ void I2C_WriteData(unsigned char c)
     buff[1] = c;
 
     /* Write the buffer to display controller */
-    Display_I2C.write(OLED_I2C_ADDRESS, buff, sizeof(buff), false);
+    Display_I2C.write(MBED_CONF_SSD1306_OLED__I2CADDRESS, buff, sizeof(buff), false);
 }
 
 
 /*******************************************************************************
-* Function Name: void I2C_WriteM01(unsigned char * pData, int NumBytes) 
+* Function Name: void ssd1306_WriteM01(unsigned char * pData, int NumBytes) 
 ********************************************************************************
 *
 * Summary: This function writes multiple data bytes to the display controller with A0 = 1
@@ -175,7 +172,7 @@ void I2C_WriteData(unsigned char c)
 *  None
 *
 *******************************************************************************/
-void I2C_WriteDataStream(unsigned char * pData, int numBytes) 
+void ssd1306_WriteDataStream(unsigned char * pData, int numBytes) 
 {   
 //    printf("WriteDataStream %d\n",numBytes);
     int i;
@@ -185,13 +182,13 @@ void I2C_WriteDataStream(unsigned char * pData, int numBytes)
     char *data = (char *)malloc(numBytes + 1);
     memcpy(data+1,pData,numBytes);
     data[0] = OLED_CONTROL_BYTE_DATA_STREAM;
-    Display_I2C.write(OLED_I2C_ADDRESS,data,numBytes+1,false);
+    Display_I2C.write(MBED_CONF_SSD1306_OLED__I2CADDRESS,data,numBytes+1,false);
     free(data);
     
 }
 
 /*******************************************************************************
-* Function Name: void I2C_ReadM01(unsigned char * pData, int numBytes)  
+* Function Name: void ssd1306_ReadM01(unsigned char * pData, int numBytes)  
 ********************************************************************************
 *
 * Summary: This function reads multiple data bytes from the display controller with A0 = 1
@@ -204,7 +201,7 @@ void I2C_WriteDataStream(unsigned char * pData, int numBytes)
 *  None
 *
 *******************************************************************************/
-void I2C_ReadM01(unsigned char * pData, int numBytes) 
+void ssd1306_ReadM01(unsigned char * pData, int numBytes) 
 {
     /* SSD1306 is not readable through i2c. Using cache instead (LCDConf.c, GUIDRV_SPAGE_1C1)*/
 }

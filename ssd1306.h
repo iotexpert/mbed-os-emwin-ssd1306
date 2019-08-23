@@ -48,13 +48,13 @@
 *       Public routines
 */
 
-void          I2C_Init(void);
-void          I2C_WriteCmd(unsigned char c);
-void          I2C_WriteCmdStream(const char*data,int num);
+void          ssd1306_Init(void);
+void          ssd1306_WriteCmd(unsigned char c);
+void          ssd1306_WriteCmdStream(const char*data,int num);
 
-void          I2C_WriteData(unsigned char c);
-void          I2C_WriteDataStream(unsigned char * pData, int NumBytes);
-void          I2C_ReadM01(unsigned char * pData, int NumBytes);
+void          ssd1306_WriteData(unsigned char c);
+void          ssd1306_WriteDataStream(unsigned char * pData, int NumBytes);
+void          ssd1306_ReadM01(unsigned char * pData, int NumBytes);
 
 #endif /* __I2C_H */
 
