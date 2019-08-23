@@ -44,7 +44,7 @@ Purpose     : Display controller configuration (single layer)
 #include "mbed.h"
 #include "GUI.h"
 #include "GUIDRV_SPage.h"
-#include "i2c_portapi.h"
+#include "ssd1306.h"
 
 
 /*********************************************************************
@@ -243,8 +243,8 @@ static void _InitController(void)
         OLED_DISPLAYON,           // 0xAF  //Set display on
     };
 
-    I2C_Init();
-    I2C_WriteCmdStream(initializeCmds, sizeof(initializeCmds));
+    ssd1306_Init();
+    ssd1306_WriteCmdStream(initializeCmds, sizeof(initializeCmds));
 }
 
 
@@ -287,9 +287,9 @@ void LCD_X_Config(void)
     //
     // Configure hardware routines
     //
-    PortAPI.pfWrite8_A0  = I2C_WriteCmd;
-    PortAPI.pfWrite8_A1  = I2C_WriteData;
-    PortAPI.pfWriteM8_A1 = I2C_WriteDataStream;
+    PortAPI.pfWrite8_A0  = ssd1306_WriteCmd;
+    PortAPI.pfWrite8_A1  = ssd1306_WriteData;
+    PortAPI.pfWriteM8_A1 = ssd1306_WriteDataStream;
     
     /* SSD1306 is not readable through i2c. Cache is enabled 
     to use display without data read operations*/
@@ -336,12 +336,12 @@ int LCD_X_DisplayDriver(unsigned LayerIndex, unsigned Cmd, void * pData) {
         break;
 
     case LCD_X_ON: 
-        I2C_WriteCmd(OLED_DISPLAYON);
+        ssd1306_WriteCmd(OLED_DISPLAYON);
         r = 0;
         break;
         
     case LCD_X_OFF: 
-        I2C_WriteCmd(OLED_DISPLAYOFF);
+        ssd1306_WriteCmd(OLED_DISPLAYOFF);
         r = 0;
         break;
 

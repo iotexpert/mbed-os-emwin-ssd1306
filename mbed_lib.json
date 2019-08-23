@@ -1,7 +1,9 @@
 {
     "name" : "SSD1306_OLED",
     "config": {
-        "TFTRD":"P12_3",
-        "TFTWR":"P12_0",
+        "SDA":"P6_1",
+        "SCL":"P6_0",
+        "I2CADDRESS":"0x78",
+        "I2CFREQ":"100000"
     }
 }
