@@ -1,0 +1,7 @@
+{
+    "name" : "SSD1306_OLED",
+    "config": {
+        "TFTRD":"P12_3",
+        "TFTWR":"P12_0",
+    }
+}
