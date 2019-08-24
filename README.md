@@ -41,7 +41,7 @@ If you need to use it for a different kit you can add pins using the target over
             "target.components_add": ["EMWIN_OSNTS"]
         },
         "CY8CKIT_ANEWKIT" : {
-            "SSD1306_OLD.SDA":"P12_3"
+            "SSD1306_OLED.SDA":"P12_3"
         }
     }
 ```
